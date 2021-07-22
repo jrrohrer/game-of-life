@@ -117,3 +117,55 @@ document.querySelector('#start').addEventListener('click', () => {
 document.querySelector('#stop').addEventListener('click', () => {
   clearInterval(interval);
 });
+
+// Add some controls for defaults, random, reset, etc:
+
+document.querySelector('#reset').addEventListener('click', () => {
+  for (let y = 0; y < 100; y++) {
+    for (let x = 0; x < 100; x++) {
+      field[y][x] = false;
+    }
+  }
+  nextField = field;
+  drawField(field);
+})
+
+document.querySelector('#glider').addEventListener('click', () => {
+  for (let y = 0; y < 100; y++) {
+    for (let x = 0; x < 100; x++) {
+      field[y][x] = false;
+    }
+  }
+
+  field[20][20] = true;
+  field[20][21] = true;
+  field[20][22] = true;
+  field[19][22] = true;
+  field[18][21] = true;
+
+  nextField = field;
+  drawField(field);
+})
+
+document.querySelector('#random').addEventListener('click', () => {
+  for (let y = 0; y < 100; y++) {
+    for (let x = 0; x < 100; x++) {
+      field[y][x] = Math.random() * 100 > 65
+    }
+  }
+
+  nextField = field
+
+  drawField(field)
+})
+
+document.querySelector('canvas').addEventListener('click', event => {
+  const x = Math.floor(event.offsetX / scaleFactor)
+  const y = Math.floor(event.offsetY / scaleFactor)
+
+  field[y][x] = !field[y][x]
+
+  nextField = field
+
+  drawField(field)
+})
