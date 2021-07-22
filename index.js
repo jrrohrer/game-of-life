@@ -69,3 +69,51 @@ const getDeadOrAlive = (x, y, field) => {
   return false;
 }
 
+// Lets make a function to draw the entire field on a square canvas.
+
+const scaleFactor = 8;
+
+const drawFeild = field => {
+  const canvas = document.querySelector('canvas');
+  const context = canvas.getContext('2d'); 
+
+  // Fill entire field
+  context.fillStyle = '#fff';
+  context.fillRect(0, 0, 100 * scaleFactor, 100 * scaleFactor);
+  context.fillStyle = '#008000';
+
+  // Fill alive cells as small rectangles
+  field.forEach((row, y) => row.forEach((cell, x) => {
+    if (cell) {
+      context.fillRect(
+        x * scaleFactor,
+        y * scaleFactor,
+        scaleFactor,
+        scaleFactor
+      );
+    }
+  }));
+}
+
+// Now lets add some control buttons to let the game automatically calculate and draw new generations each 80ms:
+
+let nextFeild = field;
+
+drawFeild(field);
+
+const step = () => {
+  nextFeild = nextFeild.map((row, y) => row.map((_, x) => {
+    return getDeadOrAlive(x, y, nextFeild)
+  }));
+  drawFeild(nextFeild);
+}
+
+let interval = null;
+
+document.querySelector('#step').addEventListener('click', step);
+document.querySelector('#start').addEventListener('click', () => {
+  interval = setInterval(step, 80);
+});
+document.querySelector('#stop').addEventListener('click', () => {
+  clearInterval(interval);
+});
